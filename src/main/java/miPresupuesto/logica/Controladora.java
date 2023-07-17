@@ -67,4 +67,35 @@ public class Controladora {
 
     }
 
+    public Sueldo traerSueldos(int registro) {
+       return controlPersis.traerSueldos(registro);
+    }
+
+    public GastoFijo traerGastFijos(int registro) {
+        return controlPersis.traerGastosFijos(registro);
+    }
+
+    public GastoAdicional traerGastAdi(int registro) {
+        return controlPersis.traerGastAdi(registro);
+    }
+
+    public void editarRegistro(GastoFijo fijo, GastoAdicional gastAdi, String valor, String gasatoConcepto, String gasatoMes, double gasatoImporte) {
+         switch (valor) {
+            case "Gastos Fijos":
+                fijo.setConcepto(gasatoConcepto);
+                fijo.setMes(gasatoMes);
+                fijo.setImporte(gasatoImporte);
+                controlPersis.editarGasFijo(fijo);
+                break;
+            case "Gastos Adicionales":
+                gastAdi.setConcepto(gasatoConcepto);
+                gastAdi.setMes(gasatoMes);
+                gastAdi.setImporte(gasatoImporte);
+                controlPersis.editarGasAdi(gastAdi);
+                break;
+            default:
+                break;
+        }
+    }
+
 }

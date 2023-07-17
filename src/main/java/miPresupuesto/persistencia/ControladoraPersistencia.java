@@ -67,6 +67,34 @@ public class ControladoraPersistencia {
         }
     }
 
+    public Sueldo traerSueldos(int registro) {
+        return sueldoJpa.findSueldo(registro);
+    }
+
+    public GastoFijo traerGastosFijos(int registro) {
+        return fijoJpa.findGastoFijo(registro);
+    }
+
+    public GastoAdicional traerGastAdi(int registro) {
+        return gastAdi.findGastosAdicionales(registro);
+    }
+
+    public void editarGasFijo(GastoFijo fijo) {
+        try {
+            fijoJpa.edit(fijo);
+        } catch (Exception ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void editarGasAdi(GastoAdicional gastAdi) {
+        try {
+            this.gastAdi.edit(gastAdi);
+        } catch (Exception ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     
     
 }

@@ -31,6 +31,7 @@ public class VerRegistros extends javax.swing.JFrame {
         TablaRegisto = new javax.swing.JTable();
         btnEliminarRegistro = new javax.swing.JButton();
         btnEditarRegistro = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,6 +82,13 @@ public class VerRegistros extends javax.swing.JFrame {
             }
         });
 
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -98,7 +106,8 @@ public class VerRegistros extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnEliminarRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                                    .addComponent(btnEditarRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(btnEditarRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnVolver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
@@ -118,12 +127,14 @@ public class VerRegistros extends javax.swing.JFrame {
                     .addComponent(jComboTraer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTraerObjeto))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnEliminarRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEditarRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnEditarRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -144,15 +155,20 @@ public class VerRegistros extends javax.swing.JFrame {
     private void btnTraerObjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraerObjetoActionPerformed
         //asiganmos en una variable para poder hacer la condicion
         String valor = (String) jComboTraer.getSelectedItem();
+        //definimos opcion que determina que clase es
+        int opcion;
         switch (valor) {
             case "Sueldo":
                 cargarTablaSueldo();
+                opcion = 1;
                 break;
             case "Gastos Fijos":
                 cargarTablaGastFijos();
+                opcion = 2;
                 break;
             case "Gastos Adicionales":
                 cargarTabjaGastAdi();
+                opcion = 3;
                 break;
             default:
                 mostrarMensaje("Debe seleccionar una opcion", "Error", "Error sin registro");
@@ -177,12 +193,20 @@ public class VerRegistros extends javax.swing.JFrame {
                 switch (valor) {
                     case "Sueldo":
                         control.borrarSueldo(registro);
+                        //mesaje de realizacion exitos
+                        mostrarMensaje("Registro Eliminado", "Info", "Elimiar Registro");
+                        //actualizamos tabla
+                        cargarTablaSueldo();
                         break;
                     case "Gastos Fijos":
                         control.borrarGastFijos(registro);
+                        mostrarMensaje("Registro Eliminado", "Info", "Elimiar Registro");
+                        cargarTablaGastFijos();
                         break;
                     case "Gastos Adicionales":
                         control.borrarGastAdi(registro);
+                        mostrarMensaje("Registro Eliminado", "Info", "Elimiar Registro");
+                        cargarTabjaGastAdi();
                         break;
                     default:
                         mostrarMensaje("Debe seleccionar un registro", "Error", "Error sin registro");
@@ -197,7 +221,7 @@ public class VerRegistros extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarRegistroActionPerformed
 
     private void btnEditarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarRegistroActionPerformed
-               //asiganmos en una variable para poder hacer la condicion para determinar que registro de la tabla eliminar
+        //asiganmos en una variable para poder hacer la condicion para determinar que registro de la tabla eliminar
         String valor = (String) jComboTraer.getSelectedItem();
 
         //comprobamos que la tabla tenga registro
@@ -207,14 +231,21 @@ public class VerRegistros extends javax.swing.JFrame {
                 //traemos el id para eliminar el registro
                 int registro = Integer.parseInt(String.valueOf(TablaRegisto.getValueAt(TablaRegisto.getSelectedRow(), 3)));
                 switch (valor) {
-                    case "Sueldo":
-                        //control.editarSueldo(registro);
-                        break;
                     case "Gastos Fijos":
-                        //control.editarGastFijos(registro);
+                        //abrimos edicon de gastos fijos
+                        EditarGastos fijos = new EditarGastos(registro, valor);
+                        fijos.setVisible(true);
+                        fijos.setLocationRelativeTo(null);
+                        this.dispose();
+
                         break;
                     case "Gastos Adicionales":
-                        //control.editarGastAdi(registro);
+                        //abrimos edidion de gastos adicionales
+                        EditarGastos adicionales = new EditarGastos(registro, valor);
+                        adicionales.setVisible(true);
+                        adicionales.setLocationRelativeTo(null);
+                        this.dispose();
+
                         break;
                     default:
                         mostrarMensaje("Debe seleccionar un registro", "Error", "Error sin registro");
@@ -228,12 +259,20 @@ public class VerRegistros extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarRegistroActionPerformed
 
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        Principal vista = new Principal();
+        vista.setVisible(true);
+        vista.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TablaRegisto;
     private javax.swing.JButton btnEditarRegistro;
     private javax.swing.JButton btnEliminarRegistro;
     private javax.swing.JButton btnTraerObjeto;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> jComboTraer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

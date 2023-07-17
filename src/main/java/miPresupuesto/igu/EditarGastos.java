@@ -3,13 +3,23 @@ package miPresupuesto.igu;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import miPresupuesto.logica.Controladora;
+import miPresupuesto.logica.GastoAdicional;
+import miPresupuesto.logica.GastoFijo;
 
 public class EditarGastos extends javax.swing.JFrame {
 
-    Controladora control = new Controladora();
+    Controladora control = null;
+    String valor;
+    int registro;
+    GastoFijo fijo;
+    GastoAdicional gastAdi;
 
-    public EditarGastos() {
+    public EditarGastos(int registro, String valor) {
+        control = new Controladora();
+        this.valor = valor;
+        this.registro = registro;
         initComponents();
+        cargarDatos(registro, valor);
     }
 
     @SuppressWarnings("unchecked")
@@ -25,7 +35,7 @@ public class EditarGastos extends javax.swing.JFrame {
         jtxtImporteGFijo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
-        btnGuardarGfijo = new javax.swing.JButton();
+        btnGuardarCambios = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -52,11 +62,11 @@ public class EditarGastos extends javax.swing.JFrame {
             }
         });
 
-        btnGuardarGfijo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnGuardarGfijo.setText("Guardar");
-        btnGuardarGfijo.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarCambios.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnGuardarCambios.setText("Guardar Cambios");
+        btnGuardarCambios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarGfijoActionPerformed(evt);
+                btnGuardarCambiosActionPerformed(evt);
             }
         });
 
@@ -90,7 +100,7 @@ public class EditarGastos extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(btnVolver)
                         .addGap(18, 18, 18)
-                        .addComponent(btnGuardarGfijo)
+                        .addComponent(btnGuardarCambios)
                         .addContainerGap())))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +138,7 @@ public class EditarGastos extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnVolver)
-                    .addComponent(btnGuardarGfijo))
+                    .addComponent(btnGuardarCambios))
                 .addGap(20, 20, 20))
         );
 
@@ -147,27 +157,34 @@ public class EditarGastos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        Principal vista = new Principal();
+        VerRegistros vista = new VerRegistros();
         vista.setVisible(true);
         vista.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void btnGuardarGfijoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarGfijoActionPerformed
+    private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         //validamos que tengan valores para guardar
         if (jtxtGfijoConcepto.getText().equals("") && jtxtGfijoMes.getText().equals("") && jtxtImporteGFijo.getText().equals("")) {
             mostrarMensaje("Debe ingresar Valores", "Error", "Ingrese Valores");
         } else {
-            String gasfijoConcepto = jtxtGfijoConcepto.getText();
-            String gasfijoMes = jtxtGfijoMes.getText();
-            double gasfijoImporte = Double.parseDouble(jtxtImporteGFijo.getText().replace(",", "."));
-            mostrarMensaje("Se guardado Correctamente", "Info", "Datos Guardados");
+            String gasatoConcepto = jtxtGfijoConcepto.getText();
+            String gasatoMes = jtxtGfijoMes.getText();
+            double gasatoImporte = Double.parseDouble(jtxtImporteGFijo.getText().replace(",", "."));
+             //guardamos los valores
+            control.editarRegistro( fijo, gastAdi, valor,gasatoConcepto, gasatoMes, gasatoImporte);
+            mostrarMensaje("Se Edito Correctamente", "Info", "Datos Guardados");
+            
+            //cerramos y volvemos a la anterior
+            VerRegistros vista = new VerRegistros();
+            vista.setVisible(true);
+            vista.setLocationRelativeTo(null);
+            this.dispose();
+           
 
-            //guardamos los valores
-            control.guardarGastFijo(gasfijoConcepto, gasfijoMes, gasfijoImporte);
-        }
-    }//GEN-LAST:event_btnGuardarGfijoActionPerformed
-    
+    }//GEN-LAST:event_btnGuardarCambiosActionPerformed
+    }
+
     //mostrar mensaje metodo
     private void mostrarMensaje(String mensaje, String tipo, String titulo) {
         JOptionPane opcionPane = new JOptionPane(mensaje);
@@ -185,7 +202,7 @@ public class EditarGastos extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGuardarGfijo;
+    private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -198,4 +215,25 @@ public class EditarGastos extends javax.swing.JFrame {
     private javax.swing.JTextField jtxtGfijoMes;
     private javax.swing.JTextField jtxtImporteGFijo;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarDatos(int registro, String valor) {
+        switch (valor) {
+            case "Gastos Fijos":
+                this.fijo = control.traerGastFijos(registro);
+                jtxtGfijoConcepto.setText(fijo.getConcepto());
+                jtxtGfijoMes.setText(fijo.getMes());
+                jtxtImporteGFijo.setText(String.valueOf(fijo.getImporte()));
+                break;
+            case "Gastos Adicionales":
+                this.gastAdi = control.traerGastAdi(registro);
+                jtxtGfijoConcepto.setText(gastAdi.getConcepto());
+                jtxtGfijoMes.setText(gastAdi.getMes());
+                jtxtImporteGFijo.setText(String.valueOf(gastAdi.getImporte()));
+                break;
+            default:
+                break;
+        }
+
+    }
+
 }
