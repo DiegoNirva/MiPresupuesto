@@ -231,6 +231,14 @@ public class VerRegistros extends javax.swing.JFrame {
                 //traemos el id para eliminar el registro
                 int registro = Integer.parseInt(String.valueOf(TablaRegisto.getValueAt(TablaRegisto.getSelectedRow(), 3)));
                 switch (valor) {
+                    case "Sueldo":
+                        //abrimos edicon de gastos fijos
+                        EditarSueldo vista = new EditarSueldo(registro);
+                        vista.setVisible(true);
+                        vista.setLocationRelativeTo(null);
+                        this.dispose();
+
+                        break;
                     case "Gastos Fijos":
                         //abrimos edicon de gastos fijos
                         EditarGastos fijos = new EditarGastos(registro, valor);

@@ -4,7 +4,6 @@ package miPresupuesto.persistencia;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import miPresupuesto.igu.GastosFijos;
 import miPresupuesto.logica.GastoFijo;
 import miPresupuesto.logica.Sueldo;
 import miPresupuesto.logica.GastoAdicional;
@@ -90,6 +89,14 @@ public class ControladoraPersistencia {
     public void editarGasAdi(GastoAdicional gastAdi) {
         try {
             this.gastAdi.edit(gastAdi);
+        } catch (Exception ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void editarSueldo(Sueldo sueldo) {
+        try {
+            sueldoJpa.edit(sueldo);
         } catch (Exception ex) {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }

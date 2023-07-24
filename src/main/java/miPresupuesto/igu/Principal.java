@@ -45,7 +45,12 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Informe General");
+        jButton4.setText("Resumen General");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         btnVerRegistros.setText("Ver Registros");
         btnVerRegistros.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +138,13 @@ public class Principal extends javax.swing.JFrame {
         vista.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_btnVerRegistrosActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        ResumenGeneral vista = new ResumenGeneral();
+        vista.setVisible(true);
+        vista.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

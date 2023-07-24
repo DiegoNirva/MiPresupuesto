@@ -1,7 +1,6 @@
 package miPresupuesto.logica;
 
 import java.util.List;
-import miPresupuesto.igu.GastosFijos;
 import miPresupuesto.persistencia.ControladoraPersistencia;
 
 
@@ -97,5 +96,15 @@ public class Controladora {
                 break;
         }
     }
+
+    public void editarSueldo(Sueldo sueldo, String anio, String Mes, double ImporteNeto) {
+        sueldo.setAnio(anio);
+        sueldo.setMes(Mes);
+        sueldo.setImporteNeto(ImporteNeto);
+        controlPersis.editarSueldo(sueldo);
+    }
+
+
+ 
 
 }
